@@ -103,7 +103,7 @@ method.
       end
 
       def slug_table_record(id)
-        select(quoted_table_name + '.*').joins(:slugs).where(slug_history_clause(id)).order(Slug.arel_table[:id].desc).first
+        select(quoted_table_name + '.*', Slug.arel_table.name + ".id").joins(:slugs).where(slug_history_clause(id)).order(Slug.arel_table[:id].desc).first
       end
 
       def slug_history_clause(id)
@@ -138,7 +138,7 @@ method.
             ::Globalize.with_locale(locale) { super_create_slug(locale) }
           end
         else
-          ::Globalize.with_locale(::Globalize.locale) { super_create_slug(locale) }
+          ::Globalize.with_locale(::Globalize.locale) { super_create_slug(::Globalize.locale) }
         end
       else
         super_create_slug(nil)
